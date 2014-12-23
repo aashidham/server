@@ -8,14 +8,15 @@ def application(environ, start_response):
 	path = translate_path(request.path)
 	print path
 	if os.path.isdir(path) and os.path.exists(os.path.join(path,"index.html")):
-		f = open(os.path.join(path,"index.html"),'rb')
+		path = os.path.join(path,"index.html")
+		f = open(path,'rb')
 	elif os.path.exists(path):
 		f = open(path,'rb')
 	else:	
 		response = Response("404 not found")
 		response.status_code = 404
 		return response(environ, start_response)
-	response = Response(f.read(), mimetype=mimetypes.guess_type(request.path)[0])
+	response = Response(f.read(), mimetype=mimetypes.guess_type(path)[0])
 	return response(environ, start_response)
 
 def translate_path(path):
